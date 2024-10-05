@@ -34,6 +34,7 @@ namespace Route
 
             var app = builder.Build();
 
+
             // Update database
 
            using var scope = app.Services.CreateScope();
@@ -50,7 +51,7 @@ namespace Route
             }
             catch (Exception ex)
             {
-                var logger =   loggerFactory.CreateLogger<Program>();
+                var logger =  loggerFactory.CreateLogger<Program>();
 
                 logger.LogError(ex, "An error occurred while migrating the database.");
             }

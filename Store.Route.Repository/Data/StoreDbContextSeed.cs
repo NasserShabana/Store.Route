@@ -2,6 +2,7 @@
 using Store.Route.Repository.Data.Contexts;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -60,7 +61,7 @@ namespace Store.Route.Repository.Data
 
             if (_context.Products.Count() == 0)
             {
-                // Brand
+
                 // 1. Read Data From Json File
 
                 var ProductsData = File.ReadAllText(@"../Store.Route.Repository\Data\DataSeed\products.json");
@@ -80,7 +81,27 @@ namespace Store.Route.Repository.Data
 
             }
 
+            //if (_context.Products.Count() == 0)
+            //{
 
+            //    // 1. Read Data From Json File
+
+            //    var ProductsData = File.ReadAllText(@"../Store.Route.Repository\Data\DataSeed\delivery.json");
+
+            //    // 2. Convert json String to List<T>
+
+            //    var products = JsonSerializer.Deserialize<List<Product>>(ProductsData);
+
+            //    // 3. Seed Data to Database
+
+            //    if (products is not null && products.Count() > 0)
+            //    {
+            //        await _context.Products.AddRangeAsync(products);
+
+            //        await _context.SaveChangesAsync();
+            //    }
+
+            //}
         }
     }
 }
