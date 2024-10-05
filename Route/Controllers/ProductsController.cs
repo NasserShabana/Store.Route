@@ -15,10 +15,10 @@ namespace Store.Route.APIs.Controllers
             _productService = iproductService;
         }
 
-        [HttpGet] // Get BaseUrl/api/Products
-        public async Task<IActionResult> GetAllProducts()  // EndPoint
+        [HttpGet] // Get BaseUrl/api/Products ? Sort { Name ,PriceAsc , PriceDesc}
+        public async Task<IActionResult> GetAllProducts([FromQuery] string? Sort , [FromQuery] int? TypeId , [FromQuery] int? brandId)  // EndPoint
         {
-        var result =   await  _productService.GetAllProductsAsync();
+        var result =   await  _productService.GetAllProductsAsync(Sort , TypeId, brandId);
             return Ok(result);
         }
 

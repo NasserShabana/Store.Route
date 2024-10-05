@@ -30,9 +30,10 @@ namespace Route
             builder.Services.AddScoped<IproductService, ProductService>();
             builder.Services.AddScoped<IUnitOfWork, UnitWork>();
 
-            builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile()));
+            builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile(builder.Configuration)));
 
             var app = builder.Build();
+
 
             // Update database
 
@@ -50,7 +51,7 @@ namespace Route
             }
             catch (Exception ex)
             {
-                var logger =   loggerFactory.CreateLogger<Program>();
+                var logger =  loggerFactory.CreateLogger<Program>();
 
                 logger.LogError(ex, "An error occurred while migrating the database.");
             }
@@ -62,6 +63,8 @@ namespace Route
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 

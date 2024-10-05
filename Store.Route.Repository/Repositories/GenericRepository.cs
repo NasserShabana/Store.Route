@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Store.Route.Core.Entites;
 using Store.Route.Core.Repositories.Contract;
+using Store.Route.Core.Specifications;
 using Store.Route.Repository.Data.Contexts;
 using System;
 using System.Collections.Generic;
@@ -28,6 +29,12 @@ namespace Store.Route.Repository.Repositories
             _context.Remove(id);
         }
 
+        public void Update(TEntity entity)
+        {
+            _context.Update(entity);
+        }
+
+        #region Getall & Get Without Specifications
         public async Task<IEnumerable<TEntity>> GetAllAsync()
         {
             if(typeof(TEntity) == typeof(Product))
@@ -49,9 +56,26 @@ namespace Store.Route.Repository.Repositories
             return await _context.Set<TEntity>().FindAsync(id);
         }
 
-        public void Update(TEntity entity)
+
+        #endregion
+
+        #region Getall & Get With Specifications
+        public async Task<IEnumerable<TEntity>> GetAllWithSpecAsync(ISpecifications<TEntity,TKey> Spec)
         {
-             _context.Update(entity);
+             return await ApplySpecification(Spec).ToListAsync();   
         }
+
+        public async Task<TEntity> GetWithSpecAsync(ISpecifications<TEntity,TKey> Spec)
+        {
+            return await ApplySpecification(Spec).FirstOrDefaultAsync();
+        }
+
+        private IQueryable<TEntity> ApplySpecification(ISpecifications<TEntity, TKey> spec)
+        {
+            return SpecificationEvaluator<TEntity, TKey>.GetQuery(_context.Set<TEntity>(), spec);
+        }
+
+           #endregion
+
     }
 }
