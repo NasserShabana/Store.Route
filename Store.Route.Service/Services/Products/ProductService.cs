@@ -3,6 +3,8 @@ using Store.Route.Core;
 using Store.Route.Core.Dtos.Products;
 using Store.Route.Core.Entites;
 using Store.Route.Core.Services.Contract;
+using Store.Route.Core.Specifications;
+using Store.Route.Core.Specifications.Products;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,10 +31,13 @@ namespace Store.Route.Service.Services.Products
           return BrandsMapped;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync()
+        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(string? Sort, int? TypeId,  int? brandId)
         {
+            var Spec = new ProductSpecifications(Sort,TypeId,brandId);
+            var Products = await _unitOfWork.Repository<Product, int>().GetAllWithSpecAsync(Spec);
 
-         return _mapper.Map<IEnumerable<ProductDto>>(await _unitOfWork.Repository<Product, int>().GetAllAsync());
+            var result =  _mapper.Map<IEnumerable<ProductDto>>(Products);
+            return result;
          
         }
 
@@ -43,7 +48,9 @@ namespace Store.Route.Service.Services.Products
 
         public async Task<ProductDto> GetProductByIdAsync(int id)
         {
-            var product = await _unitOfWork.Repository<Product, int>().GetAsync(id);
+            var Spec = new ProductSpecifications(id);
+
+            var product = await _unitOfWork.Repository<Product, int>().GetWithSpecAsync(Spec);
             var mappedProduct = _mapper.Map<ProductDto>(product);
             return mappedProduct;
         }

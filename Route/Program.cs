@@ -30,7 +30,7 @@ namespace Route
             builder.Services.AddScoped<IproductService, ProductService>();
             builder.Services.AddScoped<IUnitOfWork, UnitWork>();
 
-            builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile()));
+            builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile(builder.Configuration)));
 
             var app = builder.Build();
 
@@ -63,6 +63,8 @@ namespace Route
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
+
+            app.UseStaticFiles();
 
             app.UseHttpsRedirection();
 
