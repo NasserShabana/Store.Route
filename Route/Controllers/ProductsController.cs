@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Store.Route.Core.Services.Contract;
+using Store.Route.Core.Specifications.Products;
 
 namespace Store.Route.APIs.Controllers
 {
@@ -16,9 +17,9 @@ namespace Store.Route.APIs.Controllers
         }
 
         [HttpGet] // Get BaseUrl/api/Products ? Sort { Name ,PriceAsc , PriceDesc}
-        public async Task<IActionResult> GetAllProducts([FromQuery] string? Sort , [FromQuery] int? TypeId , [FromQuery] int? brandId)  // EndPoint
+        public async Task<IActionResult> GetAllProducts([FromQuery] ProductSpecParams productSpec )  // EndPoint
         {
-        var result =   await  _productService.GetAllProductsAsync(Sort , TypeId, brandId);
+        var result =   await  _productService.GetAllProductsAsync(productSpec.Sort, productSpec.brandId, productSpec.TypeId, productSpec.PageSize, productSpec.PageIndex);
             return Ok(result);
         }
 

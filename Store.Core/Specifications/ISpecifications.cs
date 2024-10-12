@@ -18,5 +18,10 @@ namespace Store.Route.Core.Specifications
 
         public Expression<Func<TEntity, object>> OrderByDescending { get; set; }
 
+
+        public int Skip { get; set; }
+        public int Take { get; set; }
+        public bool IsPagingEnabled { get; set; }
+
     }
 }

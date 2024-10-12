@@ -13,22 +13,22 @@ namespace Store.Route.Repository
     public class SpecificationEvaluator<TEtity,TKey>  where TEtity : BaseEntity<TKey>
     {
         // Generate Query And Return It
-        public static IQueryable<TEtity> GetQuery(IQueryable<TEtity> InputQuery , ISpecifications<TEtity,TKey> Spec)
-        { 
-        
+        public static IQueryable<TEtity> GetQuery(IQueryable<TEtity> InputQuery, ISpecifications<TEtity, TKey> Spec)
+        {
+
             var Query = InputQuery;
 
             // Where
             if (Spec.Criteria != null)
             {
-               Query = Query.Where(Spec.Criteria); // _context.products.Where(P => P.Id == 1);
+                Query = Query.Where(Spec.Criteria); // _context.products.Where(P => P.Id == 1);
             }
-             
-                
+
+
             // Include
             if (Spec.Includes != null)
             {
-               Query = Spec.Includes.Aggregate(Query, (currentQuery, includeExpression) => currentQuery.Include(includeExpression));
+                Query = Spec.Includes.Aggregate(Query, (currentQuery, includeExpression) => currentQuery.Include(includeExpression));
             }
 
             // Order By Asc
@@ -43,11 +43,10 @@ namespace Store.Route.Repository
                 Query = Query.OrderByDescending(Spec.OrderByDescending);
             }
 
-            //// Filter
-            //if (Spec.Criteria != null)
-            //{
-            //    Query = Query.Where(Spec.Criteria);
-            //}
+            if (Spec.IsPagingEnabled)
+            {
+                Query = Query.Skip(Spec.Skip).Take(Spec.Take);
+            }
 
             return Query;
         }

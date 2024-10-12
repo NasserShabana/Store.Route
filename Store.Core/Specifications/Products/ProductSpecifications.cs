@@ -10,42 +10,44 @@ namespace Store.Route.Core.Specifications.Products
 {
     public class ProductSpecifications : BaseSpecifications<Product,int>
     {
-        public ProductSpecifications(string? Sort , int? TypeId, int? brandId) : base 
+        public ProductSpecifications(ProductSpecParams productSpec) : base 
             (
-            (p =>
-            (!TypeId.HasValue || p.TypeId == TypeId)
+            p =>
+            (!productSpec.TypeId.HasValue || p.TypeId == productSpec.TypeId)
             &&
-            (!brandId.HasValue || p.BrandId == brandId))
+            (!productSpec.brandId.HasValue || p.BrandId == productSpec.brandId)
             )
         {
-            AddInclude();
-
+ 
            // Name , Price ,PriceDesc
-           if(!string.IsNullOrEmpty(Sort))
+           if(!string.IsNullOrEmpty(productSpec.Sort))
             {
-                var result = Sort.ToLower();
+                
 
-                switch (result)
+                switch (productSpec.Sort)
                 {
                      case "name":
-                        OrderBy = x => x.Name;
+                        AddOrderBy(x => x.Name);
                         break;
                     case "priceasc":
-                        OrderBy = x => x.Price;
+                        AddOrderBy(x => x.Price);
                         break;
                     case "pricedesc":
-                        OrderByDescending = x => x.Price;
+                        AddOrderByDescending(x => x.Price);
                         break;
-                    default: 
-                        OrderBy = x => x.Name;
+                    default:
+                        AddOrderBy(x => x.Name);
                         break;
                 }
             }
             else
             {
-                OrderBy = x => x.Name;
+                AddOrderBy(x => x.Name);
             }
 
+            AddInclude();
+
+            ApplyPagination(productSpec.PageSize * (productSpec.PageIndex - 1), productSpec.PageSize);
         }
 
         public ProductSpecifications(int Id)

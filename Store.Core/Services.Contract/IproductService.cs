@@ -9,7 +9,7 @@ namespace Store.Route.Core.Services.Contract
 {
     public interface IproductService
     {
-        Task<IEnumerable<ProductDto>> GetAllProductsAsync(string? Sort, int? TypeId, int? brandId);
+        Task<IEnumerable<ProductDto>> GetAllProductsAsync(string? Sort, int? brandId, int? TypeId, int? PageSize,  int? PageIndex);
         Task<IEnumerable<TypeBrandDto>> GetAllTypesAsync();
         Task<IEnumerable<TypeBrandDto>> GetAllBrandsAsync();
         Task<ProductDto> GetProductByIdAsync(int id);
