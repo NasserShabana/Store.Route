@@ -13,6 +13,8 @@ namespace Store.Route.Core.Specifications.Products
         public ProductSpecifications(ProductSpecParams productSpec) : base 
             (
             p =>
+            (string.IsNullOrEmpty(productSpec.Search) || p.Name.ToLower().Contains(productSpec.Search))
+            &&
             (!productSpec.TypeId.HasValue || p.TypeId == productSpec.TypeId)
             &&
             (!productSpec.brandId.HasValue || p.BrandId == productSpec.brandId)

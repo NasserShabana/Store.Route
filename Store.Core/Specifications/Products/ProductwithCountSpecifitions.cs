@@ -12,16 +12,17 @@ namespace Store.Route.Core.Specifications.Products
 
 
         public ProductwithCountSpecifitions(ProductSpecParams productSpec) : base
-           (
-               p =>
-                   (!productSpec.TypeId.HasValue || p.TypeId == productSpec.TypeId)
-                &&
-                   (!productSpec.brandId.HasValue || p.BrandId == productSpec.brandId)
-           )
-
+              (
+                  p =>
+                        (string.IsNullOrEmpty(productSpec.Search) || p.Name.ToLower().Contains(productSpec.Search))
+              &&
+                        (!productSpec.TypeId.HasValue || p.TypeId == productSpec.TypeId)
+              &&
+                        (!productSpec.brandId.HasValue || p.BrandId == productSpec.brandId)
+              )
         {
 
-             
+
         }
 
     }
