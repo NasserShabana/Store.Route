@@ -7,6 +7,10 @@ using Store.Route.Service.Services.Products;
 using Store.Route.Core.Mapping.Products;
 using Microsoft.AspNetCore.Mvc;
 using Store.Route.APIs.Errors;
+using Store.Route.Core.Repositories.Contract;
+using Store.Route.Repository.Repositories;
+using StackExchange.Redis;
+using Store.Route.Core.Mapping.Basket;
 
 namespace Store.Route.APIs.Helper
 {
@@ -20,6 +24,7 @@ namespace Store.Route.APIs.Helper
             services.AddUserDefinedService();
             services.AddAutoMapperService(configuration);
             services.AddInvalidModelStateResponseService();
+            services.AddRedisResponseService(configuration);
 
             return services;
         }
@@ -59,6 +64,7 @@ namespace Store.Route.APIs.Helper
 
             services.AddScoped<IproductService, ProductService>();
             services.AddScoped<IUnitOfWork, UnitWork>();
+            services.AddScoped<IBasketRepository, BasketRepository>();
 
             return services;
         }
@@ -67,7 +73,7 @@ namespace Store.Route.APIs.Helper
         {
 
             services.AddAutoMapper(m => m.AddProfile(new ProductProfile(configuration)));
-
+            services.AddAutoMapper(m => m.AddProfile(new BasketProfile()));
 
             return services;
         }
@@ -91,6 +97,17 @@ namespace Store.Route.APIs.Helper
 
                     return new BadRequestObjectResult(Response);
                 };
+            });
+
+            return services;
+        }
+
+        private static IServiceCollection AddRedisResponseService(this IServiceCollection services , IConfiguration configuration)
+        {
+            services.AddSingleton<IConnectionMultiplexer>((ServiceProvider) =>
+            {
+              var connection =  configuration.GetConnectionString("Redis");
+                return ConnectionMultiplexer.Connect(connection);
             });
 
             return services;
