@@ -1,4 +1,7 @@
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Store.Route.APIs.Errors;
 using Store.Route.Core;
 using Store.Route.Core.Mapping.Products;
 using Store.Route.Core.Services.Contract;
@@ -31,6 +34,24 @@ namespace Route
             builder.Services.AddScoped<IUnitOfWork, UnitWork>();
 
             builder.Services.AddAutoMapper(m => m.AddProfile(new ProductProfile(builder.Configuration)));
+
+            builder.Services.Configure<ApiBehaviorOptions>(options =>
+            {
+                options.InvalidModelStateResponseFactory = (ActionContext) =>
+                {
+                  var errors =  ActionContext.ModelState.Where(P => P.Value != null)
+                    .SelectMany(P => P.Value.Errors)
+                    .Select(E => E.ErrorMessage)
+                    .ToArray();
+
+                    var Response = new ApiReponse()
+                    { 
+                        Errors = errors
+                    };
+
+                    return new BadRequestObjectResult(Response);
+                };
+            });
 
             var app = builder.Build();
 
