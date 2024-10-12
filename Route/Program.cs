@@ -44,7 +44,7 @@ namespace Route
                     .Select(E => E.ErrorMessage)
                     .ToArray();
 
-                    var Response = new ApiReponse()
+                    var Response = new ApiValidationErrorReponse()
                     { 
                         Errors = errors
                     };
