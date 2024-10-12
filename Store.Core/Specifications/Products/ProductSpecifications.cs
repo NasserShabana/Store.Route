@@ -15,9 +15,9 @@ namespace Store.Route.Core.Specifications.Products
             p =>
             (string.IsNullOrEmpty(productSpec.Search) || p.Name.ToLower().Contains(productSpec.Search))
             &&
-            (!productSpec.TypeId.HasValue || p.TypeId == productSpec.TypeId)
+            (!productSpec.TypeId.HasValue ||   productSpec.TypeId == p.TypeId )
             &&
-            (!productSpec.brandId.HasValue || p.BrandId == productSpec.brandId)
+            (!productSpec.brandId.HasValue ||   productSpec.brandId == p.BrandId)
             )
         {
  

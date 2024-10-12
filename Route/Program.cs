@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Store.Route.APIs.Errors;
+using Store.Route.APIs.MiddleWares;
 using Store.Route.Core;
 using Store.Route.Core.Mapping.Products;
 using Store.Route.Core.Services.Contract;
@@ -77,6 +78,7 @@ namespace Route
                 logger.LogError(ex, "An error occurred while migrating the database.");
             }
 
+            app.UseMiddleware<ExceptionMiddleWare>(); // Configure User-Defind MiddleWare
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
