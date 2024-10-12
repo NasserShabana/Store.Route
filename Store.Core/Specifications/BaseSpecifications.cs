@@ -20,7 +20,7 @@ namespace Store.Route.Core.Specifications
 
         public BaseSpecifications(Expression<Func<TEntity, bool>> expression)
         {
-            expression = Criteria;
+              Criteria = expression;
         }
 
         public BaseSpecifications() 
