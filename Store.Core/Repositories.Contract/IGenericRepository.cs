@@ -19,5 +19,7 @@ namespace Store.Route.Core.Repositories.Contract
         Task AddAsync(TEntity entity);
         void Update(TEntity entity);
         void Delete(TKey id);
+
+        Task<int> CountAsync(ISpecifications<TEntity, TKey> Spec);
     }
 }

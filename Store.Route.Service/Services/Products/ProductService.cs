@@ -2,6 +2,7 @@
 using Store.Route.Core;
 using Store.Route.Core.Dtos.Products;
 using Store.Route.Core.Entites;
+using Store.Route.Core.Helper;
 using Store.Route.Core.Services.Contract;
 using Store.Route.Core.Specifications;
 using Store.Route.Core.Specifications.Products;
@@ -31,13 +32,16 @@ namespace Store.Route.Service.Services.Products
           return BrandsMapped;
         }
 
-        public async Task<IEnumerable<ProductDto>> GetAllProductsAsync(ProductSpecParams productSpec)
+        public async Task<PaginationRespone<ProductDto>> GetAllProductsAsync(ProductSpecParams productSpec)
         {
             var Spec = new ProductSpecifications( productSpec); 
             var Products = await _unitOfWork.Repository<Product, int>().GetAllWithSpecAsync(Spec);
-
             var result =  _mapper.Map<IEnumerable<ProductDto>>(Products);
-            return result;
+
+            var CountSpec = new ProductwithCountSpecifitions(productSpec);
+            var count = await _unitOfWork.Repository<Product, int>().CountAsync(CountSpec);
+
+            return new PaginationRespone<ProductDto>( productSpec.PageIndex, productSpec.PageSize, count, result);
          
         }
 

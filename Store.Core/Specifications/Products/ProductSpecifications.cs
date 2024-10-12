@@ -50,10 +50,8 @@ namespace Store.Route.Core.Specifications.Products
             ApplyPagination(productSpec.PageSize * (productSpec.PageIndex - 1), productSpec.PageSize);
         }
 
-        public ProductSpecifications(int Id)
+        public ProductSpecifications(int Id) : base (p => p.Id == Id)
         {
-            Criteria = p => p.Id == Id;
-
             AddInclude();
         }
 

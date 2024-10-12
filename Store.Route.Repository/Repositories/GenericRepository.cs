@@ -77,5 +77,10 @@ namespace Store.Route.Repository.Repositories
 
            #endregion
 
+        public async Task<int> CountAsync(ISpecifications<TEntity, TKey> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
+        }
+
     }
 }
